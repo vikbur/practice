@@ -1,21 +1,11 @@
-# encoding=utf-8
+# encoding:utf-8
+import math
+consts = {"pi": math.pi, "e":math.e}
 
-pi = float(3.141592653589)
-e = float(2.711828182845)
-
-l = []
 task = raw_input("Please, enter <const:rang>\n")
-task.split(":")
-for w in task.split(":"):
-   l.append(w)
+w = task.split(":")
 
-if len(l)== 2:
-   num = int(l[1])
-   if l[0] == "pi":
-      print round(pi,num)
-   elif l[0] == "e":
-      print round(e,num)
-   else:
-      print "Not found constant"
+if len(w)== 2:
+print round(consts[w[0]],int(w[1]))
 else:
-   print "incorrect data"
+print "incorrect data"
