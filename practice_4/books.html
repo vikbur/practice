@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset=utf-8 />
+    <title>Book List</title>
+</head>
+<body>
+<center>
+<h3>Book List</h3>
+<table>
+    <tr>
+     {% for values in books %}
+        <td>
+        <a href="{{ values.get_absolute_url }}"> {{ values.title }} </a>
+        </td>
+        <td>
+            {% for authors in values.authors.all %}
+                {{ authors.last_name }},
+            {% endfor %}
+        </td>
+        <td>
+        {{ values.publisher}}
+        </td>
+        </tr>
+    {% endfor %}
+
+</table>
+</center>
+</body>
+</html>

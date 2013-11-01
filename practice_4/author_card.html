@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset=utf-8 />
+    <title>Author card</title>
+</head>
+<body>
+<center>
+<h3>Author card</h3>
+<table>
+    <tr>
+        <td>First Name</td><td>{{author.first_name}}</td>
+    </tr>
+    <tr>
+        <td>Last name</td><td>{{author.last_name}}</td>
+    </tr>
+     {% if author.email %}
+    <tr>
+        <td>e-mail:</td><td>{{author.email}}</td>
+    </tr>
+     {% endif %}
+</table>
+</center>
+</body>
+</html>
