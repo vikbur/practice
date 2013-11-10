@@ -1,72 +1,88 @@
 from django.db import models
-from datetime import datetime
+from django.db import connection
+import datetime
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 
 
+# Create your models here.
 class Author(models.Model):
-    first_name = models.CharField('first_name', max_length=30)
-    last_name = models.CharField('last_name', max_length=30)
-    email = models.EmailField(blank=True, null=True)
+    first_name = models.CharField(max_length=32)
+    last_name = models.CharField(max_length=32)
+    email = models.EmailField(null=True, blank=True)
 
     def __unicode__(self):
-        return '%s %s' % (self.last_name, self.first_name)
+        return u'%s %s' % (self.first_name, self.last_name)
 
     def get_absolute_url(self):
-        return '/library/authors/%d/' % (self.id)
+        return "/library/authors/%i/" % self.id
 
 
 class Book(models.Model):
-    title = models.CharField('title', max_length=128)
+    title = models.CharField(max_length=128)
     authors = models.ManyToManyField('Author')
     publisher = models.ForeignKey('Publisher')
-    publication_date = models.DateField('publication_date', default=datetime.now())
+    publication_date = models.DateField(default=datetime.datetime.now())
+
+    class Meta(object):
+        verbose_name=u'Kniga'
+        verbose_name_plural=u'Knigi'
+
+    def get_absolute_url(self):
+        cur = connection.cursor()
+        cur.execute(
+            "SELECT id FROM booksimage_book WHERE title = %s",
+            [self.title])
+        return '/library/books/%s/' % cur.fetchall()[0]
+
+    def get_absolute_url(self):
+     return "/library/authors/{}/".format(self.id)
 
     def __unicode__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return '/library/books/%d/' % (self.id)
-
-    def get_authors(self):
-        return ', '.join([author.first_name + ' ' + author.last_name for author in self.authors.all()])
-
 
 class Publisher(models.Model):
-    title = models.CharField('title', max_length=32)
-    address = models.TextField('address')
-    city = models.CharField('city', max_length=64)
-    country = models.CharField('country', max_length=64)
-    website = models.URLField('website')
+    title = models.CharField(max_length=32)
+    address = models.TextField()
+    city = models.CharField(max_length=64)
+    country = models.CharField(max_length=64)
+    website = models.URLField()
 
     def __unicode__(self):
-        return '%s (%s)' % (self.title, self.website)
+        return u'%s (%s)' % (self.title, self.website)
 
 
 class BooksImage(models.Model):
+    small = models.ImageField(upload_to="images/small")
+    big = models.ImageField(upload_to="images/big", null=True, blank=True)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey("content_type", "object_id")
     book = models.ForeignKey(Book)
-    smallImage = models.ImageField(upload_to="img")
-    largeImage = models.ImageField(upload_to="smallimg", null=True, blank=True)
-    cont = models.ForeignKey(ContentType)
-    objNum = models.PositiveIntegerField()
-    contObj = generic.GenericForeignKey("cont", "objNum")
+
+    def getcover(self):
+        return self.__cover
+
+    def setcover(self, cover):
+        self.__cover = cover
+
+    cover = property(getcover, setcover)
 
     def __unicode__(self):
         return u'%s' % self.book
 
-    def count(self):
-        num = 0
-        if self.smallImage:
-            num += 1
-        if self.largeImage:
-            num += 1
-        return(num)
+    def images_cnt(self):
+        cnt=0
+        if self.small:
+            cnt+=1
+        if self.big:
+            cnt+=1
+        return(cnt)
 
-    def view_smallImage(self):
-        return u'<img src="%s"/>' % (self.smallImage.url)
-    view_smallImage.allow_tags = True
+    def cover(self):
+        if self.small:
+            return '<img src="%s">' %(self.small.url)
+        return None
 
-    def view_largeImage(self):
-        return u'<img src="%s"/>' % (self.largeImage.name)
-    view_largeImage.allow_tags = True
-# Create your models here.
+    cover.allow_tags=True

@@ -1,20 +1,21 @@
 from django.conf.urls import patterns, include, url
-from bookslibrary import settings
-from bookslibrary.settings import MEDIA_ROOT
+
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^$', 'library.views.index'),
-    url(r'^library/$', 'library.views.index'),
-    url(r'^library/books/$', 'library.views.index'),
-    url(r'^library/books/(\d+)/$', 'library.views.bookCard'),
-    url(r'^library/authors/$', 'library.views.authors'),
-    url(r'^library/authors/(\d+)/$', 'library.views.authorsCard'),
+    url(r'^library/$', 'booksimage.views.books'),
+    url(r'^library/books/$', 'booksimage.views.books'),
+    url(r'^library/books/(\d+)/$', 'booksimage.views.book'),
+    url(r'^library/authors/$', 'booksimage.views.authors'),
+    url(r'^library/authors/(\d+)/$', 'booksimage.views.author'),
+    # Examples:
+    # url(r'^$', 'imgs.views.home', name='home'),
+    # url(r'^imgs/', include('imgs.foo.urls')),
+    # Uncomment the admin/doc line below to enable admin documentation:
+    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
-        'document_root': settings.MEDIA_ROOT,
-        }),
 )
