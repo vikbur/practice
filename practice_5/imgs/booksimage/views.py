@@ -30,4 +30,3 @@ def author(request, author_id):
 def authors(request):
     context = {'authors': Author.objects.all()}
     return render(request, 'authors.html', context)
-	
