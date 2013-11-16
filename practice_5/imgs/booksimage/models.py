@@ -15,7 +15,7 @@ class Author(models.Model):
         return u'%s %s' % (self.first_name, self.last_name)
 
     def get_absolute_url(self):
-        return "/library/authors/%i/" % self.id
+        return '/library/authors/{}/'.format(self.id)
 
 
 class Book(models.Model):
@@ -34,9 +34,6 @@ class Book(models.Model):
             "SELECT id FROM booksimage_book WHERE title = %s",
             [self.title])
         return '/library/books/%s/' % cur.fetchall()[0]
-
-    #def get_absolute_url(self):
-    #    return "/library/books/%i/" % self.id
 
     def __unicode__(self):
         return self.title
