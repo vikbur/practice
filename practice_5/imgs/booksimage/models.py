@@ -83,3 +83,4 @@ class BooksImage(models.Model):
         return None
 
     cover.allow_tags=True
+	
