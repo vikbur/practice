@@ -16,7 +16,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': os.path.join(PROJECT_ROOT, 'data.db'),    # Or path to database file if using sqlite3.
-	}
+		}
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
