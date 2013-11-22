@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Список книг</title>
+</head>
+<body>
+ <h1>Список книг:</h1>
+ <table>
+  <tr>
+   <th>Название</th>
+   <th>Автор</th>
+   <th>Издательство</th>
+  </tr>
+  {% for item in books %}
+  <tr>
+   <td>
+    <a href="{{ item.get_absolute_url }}"> {{ item.title }} </a>
+   </td>
+   <td>
+   {% for authors in item.authors.all %}
+   <a href="{{ authors.get_absolute_url }}">{{ authors.last_name }}{% if 1 %}; {% endif %}
+   <!--над этим надо подумать, как избавиться от ненужной запятой-->
+   {% endfor %}
+   </td>
+   <td>
+    {{ item.publisher}}
+   </td>
+  </tr>
+  {% endfor %}
+ </table>
+</body>
+</html>
